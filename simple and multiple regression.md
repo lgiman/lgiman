@@ -61,3 +61,26 @@ test_y_ = regr.predict(test_x)
 print("Mean absolute error: %.2f" % np.mean(np.absolute(test_y_ - test_y)))
 print("Residual sum of squares (MSE): %.2f" % np.mean((test_y_ - test_y) ** 2))
 print("R2-score: %.2f" % r2_score(test_y , test_y_) )
+
+
+
+###### Multi regression
+from sklearn import linear_model
+regr = linear_model.LinearRegression()
+x = np.asanyarray(train[['ENGINESIZE', 'CYLINDERS','FUELCONSUMPTION_COMB']])
+y = np.asanyarray(train[['CO2EMISSIONS']])
+regr.fit (x, y)
+# The coefficients
+print ('Coefficients: ', regr.coef_) 
+print ('Intercept: ',regr.intercept_) 
+
+y_hat = regr.predict(test[['ENGINESIZE', 'CYLINDERS','FUELCONSUMPTION_COMB']])
+x = np.asanyarray(test[['ENGINESIZE', 'CYLINDERS','FUELCONSUMPTION_COMB']])
+y = np.asanyarray(test[['CO2EMISSIONS']])
+print("Residual sum of squares: %.2f"
+      % np.mean((y_hat - y)**2))
+print('Variance dcore: %.2f' % regr.score(x,y))
+# Variance score : 1 is perfect prediction
+
+
+
