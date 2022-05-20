@@ -53,6 +53,7 @@ plt.xlabel("D")
 plt.ylabel("MOE")
 
 #### test data
+from sklearn.metrics import r2_score
 test_x = np.asanyarray(test[['Dens']])
 test_y = np.asanyarray(test[['MOE']])
 test_y_ = regr.predict(test_x)
