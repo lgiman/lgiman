@@ -145,8 +145,8 @@ plt.show()
 #1- Quadratic               Y= x^2
 #2- Exponential             Y= bc^x
 #3- Logarithmic             Y= log(x)     human height   
-#4- Sigmoidal/Logistic      Y= a +(b /1 + e^(x - d)    S form
-
+#4- Sigmoidal/Logistic      Y= a +(b /1 + e^B_1 (x - B_2)   S form
+#$$$$ B_1: Control the curve steepness , B_2: Slides the curve on X-axis
 
 X = np.arange(-5.0, 5.0, 0.1)
 Y = 1.0 / (1.0 + np.exp(-X))
@@ -154,4 +154,45 @@ Y = 1.0 / (1.0 + np.exp(-X))
 plt.plot(X,Y) 
 plt.ylabel('Dependent Variable')
 plt.xlabel('Independent Variable')
+plt.show()
+
+# S form plot
+
+### Building The Model
+def sigmoid(x, Beta_1, Beta_2):
+     y = 1 / (1 + np.exp(-Beta_1*(x-Beta_2)))
+     return y
+
+# Lets look at a sample sigmoid line that might fit with the data:
+beta_1 = 0.10
+beta_2 = 1990.0
+
+#logistic function
+Y_pred = sigmoid(x_data, beta_1 , beta_2)
+
+#plot initial prediction against datapoints
+plt.plot(x_data, Y_pred*15000000000000.)
+plt.plot(x_data, y_data, 'ro')
+
+#Our task here is to find the best parameters for our model. Lets first normalize our x and y:
+#Let's the computer to do that:
+# Lets normalize our data
+xdata =x_data/max(x_data)
+ydata =y_data/max(y_data)
+
+from scipy.optimize import curve_fit
+popt, pcov = curve_fit(sigmoid, xdata, ydata)
+#print the final parameters
+print(" beta_1 = %f, beta_2 = %f" % (popt[0], popt[1]))
+
+# Now we plot our resulting regression model.
+x = np.linspace(1960, 2015, 55)
+x = x/max(x)
+plt.figure(figsize=(8,5))
+y = sigmoid(x, *popt)
+plt.plot(xdata, ydata, 'ro', label='data')
+plt.plot(x,y, linewidth=3.0, label='fit')
+plt.legend(loc='best')
+plt.ylabel('GDP')
+plt.xlabel('Year')
 plt.show()
